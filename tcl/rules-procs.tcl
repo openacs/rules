@@ -26,6 +26,7 @@ namespace eval rules::rule {
 	-rule_name
 	-asm_id
 	-active_p
+        -rule_id 
     } {
 	Add new rule
     } {

@@ -10,6 +10,7 @@
     <querytext>
      declare begin
         :1 := rule.new(
+              rule_id   =>      :rule_id,
 	      rule_name	=>	:rule_name,
 	      asm_id	=>	:asm_id,
 	      active_p	=>	:active_p
