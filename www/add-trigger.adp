@@ -1,5 +1,6 @@
 <master>
 <property name="context">@context@</property>
+<property name="title">Registration Rules</property>
 <script language="JavaScript">
 function go() {
         qs = document.add_trigger.qs_id.value;

@@ -21,18 +21,26 @@ if { ![exists_and_not_null selected_qs]} {
 
 set questions [list]
 set results [list]
+set count 0
+set first_qs 0
 
 db_foreach questions { *SQL* } {
+    incr count
+    if  { $count == 1 } { 
+          set first_qs $qs_id
+    }
     set question [list $description $qs_id]
     lappend questions $question
 }
+
+db_foreach result {select choice_id as result_id, label as value from survey_question_choices  where  question_id = :first_qs} {
+    lappend results [list $value $result_id]
+}
+
 db_foreach results { *SQL* } {
     set result [list $value $result_id]
     lappend results $result
 }
-
-
-
 
 form create add_trigger
 
