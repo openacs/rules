@@ -8,7 +8,7 @@ ad_page_contract {
     rule_id:notnull
     selected_a:optional
 }
-ad_maybe_redirect_for_registration
+auth::require_login
 set default_action 1
 
 # Just while I get the assessment package ready

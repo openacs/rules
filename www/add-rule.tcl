@@ -12,7 +12,7 @@ ad_page_contract {
 }
 
 # Just while I get the assessment package ready
-ad_maybe_redirect_for_registration
+auth::require_login
 set package_id [ad_conn package_id]
 set context [list "Add rule"]
 

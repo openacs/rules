@@ -8,7 +8,7 @@ ad_page_contract {
     rule_id:notnull
     selected_qs:optional
 }
-ad_maybe_redirect_for_registration
+auth::require_login
 set qs_sel 0
 set context [list [list "one-rule?rule_id=$rule_id" "Rule Properties"] "Add Trigger"]
 permission::require_permission -object_id $rule_id -privilege "admin"
