@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <queryset>
 
+    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
+
     <fullquery name="rules::rule::get_assessments.assessment">
     <querytext>
        select  survey_id as asm_id,name as asm_name from surveys 
