@@ -1,2 +1,0 @@
-<master>
-@users_list@
