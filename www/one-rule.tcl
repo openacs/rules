@@ -125,14 +125,11 @@ template::list::create -name actions\
 	label "Action"
 	display_template {
 	    <if @rule_actions.action_type@ eq "1">
-	     Add user to
+	     Add Automatically
 	    </if>
 	    <if @rule_actions.action_type@ eq "2">
-	     Add to list for
+	     Add to waiting list
 	    </if>
-            <if @rule_actions.action_type@ eq "3">
-              Add user to the System
-            </if>
 	}
 
 	
@@ -144,15 +141,21 @@ template::list::create -name actions\
             <%
 	    db_multirow communities communities {select community_id,pretty_name from dotlrn_communities_all}
             %>     <if @rule_actions.group_id@ eq -1>
-                   <option value=@rule_actions.group_id@>System
+                   <option value=@rule_actions.group_id@>to website
+	           <multiple name="communities">
+                   <option value=@communities.community_id@>@communities.pretty_name@
+                   </multiple>
                    </if>
                    <else>
                    <option value=@rule_actions.group_id@>@rule_actions.name@
                    <multiple name="communities">
+                   <if @rule_actions.group_id@ ne @communities.community_id@>
                    <option value=@communities.community_id@>@communities.pretty_name@
+                   </if>
                    </multiple>
+                   <option value=-1>to website
                    </select>
-                   </else>
+	          </else>
 	}
 
 
