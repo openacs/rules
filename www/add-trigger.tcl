@@ -22,9 +22,12 @@ db_foreach questions { *SQL* } {
     incr count
     if  { $count == 1 && ![exists_and_not_null selected_qs]} { 
           set selected_qs  $qs_id
-      }
+      } 
      set question [list $description $qs_id]
      lappend questions $question
+}
+if { $count == 0 } {
+ set selected_qs 0
 }
 if { ![exists_and_not_null selected_qs]} {
        set qs_sel $selected_qs
