@@ -23,17 +23,14 @@ set type_id [notification::type::get_type_id -short_name rule_notif]
 template::list::create -name triggers\
 -multirow rule_triggers\
 -key rule_def_id\
--bulk_actions {
-    "Delete" "delete-trigger" "Delete checked triggers"
-}\
--bulk_action_method post -bulk_action_export_vars {
-    rule_def_id
-    rule_id
-    qs
-}\
 -no_data "There are no triggers "\
 -row_pretty_plural "triggers"\
 -elements {
+    rule_def_id {
+	display_template {
+        <a href=delete-trigger?rule_def_id=@rule_triggers.rule_def_id@&rule_id=$rule_id>Remove</a>
+	}
+    }
     qs_id {
 	label "Question"
         display_template {
@@ -88,25 +85,27 @@ db_multirow rule_triggers get_triggers { *SQL* }
 template::list::create -name actions\
 -multirow rule_actions\
 -key rule_action_id\
--bulk_actions {
-    "Delete" "delete-action" "Delete checked actions"
-}\
--bulk_action_method post -bulk_action_export_vars {
-    rule_action_id
-    rule_id
-}\
 -no_data "There are no actions "\
 -row_pretty_plural "actions"\
 -elements {
+    rule_action_id {
+	display_template {
+        <a href=delete-action?rule_action_id=@rule_actions.rule_action_id@&rule_id=$rule_id>Remove</a>
+	}
+    }
+
     action_type {
 	label "Action"
 	display_template {
 	    <if @rule_actions.action_type@ eq "1">
 	     Add user to
 	    </if>
-	    <else >
+	    <if @rule_actions.action_type@ eq "2">
 	     Add to list for
-	    </else>
+	    </if>
+            <if @rule_actions.action_type@ eq "3">
+              Add user to the System
+            </if>
 	}
 
 	
@@ -117,11 +116,16 @@ template::list::create -name actions\
             <select name=res@rule_actions.rule_action_id@ onChange=group@rule_actions.rule_action_id@()> 
             <%
 	    db_multirow communities communities {select community_id,pretty_name from dotlrn_communities_all}
-            %>     <option value=@rule_actions.group_id@>@rule_actions.name@
+            %>     <if @rule_actions.group_id@ eq -1>
+                   <option value=@rule_actions.group_id@>System
+                   </if>
+                   <else>
+                   <option value=@rule_actions.group_id@>@rule_actions.name@
                    <multiple name="communities">
                    <option value=@communities.community_id@>@communities.pretty_name@
                    </multiple>
                    </select>
+                   </else>
 	}
 
 
