@@ -15,7 +15,7 @@ ad_page_contract {
     for { set i 0} { $i < $rules_count } { incr i } {
         set r_id [lindex $rha_id $i]
         set group_id [db_string community { select group_id from rule_history_actions where rha_id=:r_id}] 
-        if { $group_id != -1 } {
+        if { $group_id != 0 } {
         set user_id  [db_string user { select user_id from rule_history_actions where rha_id=:r_id}] 
         set today [db_string today { select to_date (sysdate,'YYYY-MM-DD') from dual}]
         if {![dotlrn::user_is_community_member_p  -user_id $user_id   -community_id $group_id]} {

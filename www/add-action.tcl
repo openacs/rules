@@ -26,7 +26,7 @@ db_foreach communities { *SQL* } {
     lappend results [list $pretty_name $community_id]
 } 
 }
-    lappend  results [list "to website" -1]
+    lappend  results [list "to website" 0]
 
 
 

@@ -31,15 +31,16 @@ db_foreach rules_related { *SQL*  } {
 		if { $perform_actions == 1 } {
 		    db_foreach action { *SQL* } {
 			set rha_id [db_nextval rha_seq]
-			set community_name [db_string name { *SQL* } -default System]
+			set community_name [db_string name { *SQL* } -default Website]
 			set today [db_string date { *SQL* }]
 			set  username [db_string username { *SQL* }]
 			if { $action_type == 1} {
-                            if { $group_id > -1 } { 
-			    append message "<li> You have joined the $community_name community."
-			    append notif_text "The user user has joined the $community_name community." 
-			    if {![dotlrn::user_is_community_member_p  -user_id $user_id   -community_id $group_id]} {
-			    dotlrn_community::add_user $group_id $user_id
+                            if { $group_id != 0 } { 
+			    append message "<li> You have joined the $community_name group."
+			    append notif_text "The user user has joined the $community_name group." 
+                            
+			    if {![group::member_p  -user_id $user_id  -group_id $group_id]} {
+			    group::add_member -group_id $group_id -user_id $user_id
 			    }
 			    db_transaction {
 				db_dml add_history { *SQL* }
@@ -67,8 +68,10 @@ db_foreach rules_related { *SQL*  } {
                                    ad_script_abort
 			    } 
 			    set user_id $user_new_info(user_id)
+				if { [apm_package_installed_p dotlrn] } {
                             dotlrn_privacy::set_user_guest_p -user_id $user_id -value "t"
 			    dotlrn::user_add -can_browse  -user_id $user_id 
+				}
 			    db_transaction {          
 				db_dml add_history_system { *SQL* }
 			    }

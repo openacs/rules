@@ -17,7 +17,7 @@ ad_page_contract {
 
 set default_action 1
 set default_active "y"
-set default_group "-1"
+set default_group "0"
 set default_answer 0
 set exp_trigger ""
 set context [list "Single Rule Properties"]
@@ -39,7 +39,7 @@ if { [exists_and_not_null rule_def_id] } {
 db_foreach communities { *SQL* } {
     lappend communities [list $pretty_name $community_id]
 }
-    lappend  communities [list "to website" -1]
+    lappend  communities [list "to website" 0]
 
 
 set actions { {"Add Automatically" 1} {"Add to waiting list " 2}}

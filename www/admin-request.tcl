@@ -20,7 +20,7 @@ set rule_name [ db_string name {select rule_name from rules where rule_id=:rule 
 set context [list [list "$return_url?rule_id=$rule" "Rule Properties"] "$rule_name"]
 set communities_list [list]
 lappend communities_list [list "All" "all"]
-lappend communities_list [list "System" "-1"]
+lappend communities_list [list "System" "0"]
 lappend rules_list [list "All" "all"]
 
 db_foreach  community {select community_id,pretty_name from dotlrn_communities_all} {
@@ -165,7 +165,7 @@ template::list::create -name requests\
     group_id {
          label "Group Name"
 	display_template {
-             < if @requests.group_id@ eq -1>
+             < if @requests.group_id@ eq 0>
                System
              </if> <else> 
                @requests.group_name@

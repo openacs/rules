@@ -126,9 +126,9 @@ template::list::create -name actions\
             <select name=res@rule_actions.rule_action_id@ onChange=group@rule_actions.rule_action_id@()> 
             <%
             if {$dotlrn_installed_p == 1} {
-	    db_multirow communities communities {select community_id,pretty_name from dotlrn_communities_all}
+	    db_multirow communities communities {select group_id as community_id,group_name as pretty_name from groups}
 	    }
-            %>     <if @rule_actions.group_id@ eq -1>
+            %>     <if @rule_actions.group_id@ eq 0>
                    <option value=@rule_actions.group_id@>to website
 	           <multiple name="communities">
                    <option value=@communities.community_id@>@communities.pretty_name@
@@ -141,7 +141,7 @@ template::list::create -name actions\
                    <option value=@communities.community_id@>@communities.pretty_name@
                    </if>
                    </multiple>
-                   <option value=-1>to website
+                   <option value=0>to website
                    </select>
 	          </else>
 	}

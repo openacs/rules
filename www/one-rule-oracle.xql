@@ -15,8 +15,8 @@
    <fullquery name="get_actions">
 	<querytext>
 		select
-		ra.rule_id,ra.group_id,ra.notify_p,ra.active_p,ra.rule_action_id,ra.action_type, (select pretty_name from dotlrn_communities_all where
-		community_id=ra.group_id) as name
+		ra.rule_id,ra.group_id,ra.notify_p,ra.active_p,ra.rule_action_id,ra.action_type, (select group_name as pretty_name from groups where
+		group_id=ra.group_id) as name
 		from rules r,rules_actions ra
 		where ra.rule_id=r.rule_id and ra.rule_id=:rule_id
 	</querytext>

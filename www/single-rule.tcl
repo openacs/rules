@@ -87,7 +87,7 @@ template::list::create -name triggers\
     group_id {
 	label "Result"
 	display_template  {
-                  <if @rule_triggers.group_id@ eq -1>
+                  <if @rule_triggers.group_id@ eq 0>
                    to website
                   </if>
                    <else>

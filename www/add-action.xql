@@ -4,7 +4,7 @@
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
    <fullquery name="communities"> 
    <querytext>
-      select community_id,pretty_name from dotlrn_communities_all
+      select group_id as community_id,group_name as pretty_name from groups
    </querytext>
    </fullquery>
 </queryset>

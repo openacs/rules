@@ -32,7 +32,7 @@
 
    <fullquery name="name">
 	      <querytext>
-		select pretty_name from dotlrn_communities_all where community_id=:group_id	
+		select group_name as pretty_name from groups  where group_id=:group_id	
 	      </querytext>
    </fullquery>
    <fullquery name="date">

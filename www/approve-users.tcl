@@ -17,7 +17,7 @@ set context [list "Add rule"]
     for { set i 0} { $i < $rules_count } { incr i } {
         set r_id [lindex $rha_id $i]
         set group_id [db_string community { *SQL* }] 
-        if { $group_id != -1 } {
+        if { $group_id != 0 } {
         set user_id  [db_string user { *SQL* }] 
         set today [db_string today { *SQL* }]
         if {![dotlrn::user_is_community_member_p  -user_id $user_id   -community_id $group_id]} {
