@@ -33,6 +33,13 @@ if (destination) location.href = destination;
 
 
 <br>
+<h2>@rule_name@ <a href=add-rule?rule_id=@rule_id@><img border=0 src=images/Edit16.gif></a></h2>
+Related Questionnarie: <b>@assessment_related@</b>
+<br>
+State:<b>@state@</b>
+<br>
+<br>
+<br>
 <table>
  <tr>
   <td>

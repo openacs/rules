@@ -19,6 +19,17 @@ if { ![exists_and_not_null qs]} {
 if { ![exists_and_not_null trigger]} {
     set trigger ""
 }
+
+set rule_name [db_string rule_name {select rule_name from rules where rule_id=:rule_id}]
+set assessment_related [db_string asm { select name from surveys where survey_id = (select asm_id from rules where rule_id=:rule_id)}]
+set state [db_string active_p {select active_p from rules where rule_id=:rule_id}]
+
+if { $state == "y"} {
+   set state "Active"
+} else {
+  set state "Not Active"
+}
+
 set type_id [notification::type::get_type_id -short_name rule_notif]
 template::list::create -name triggers\
 -multirow rule_triggers\
