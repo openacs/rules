@@ -27,7 +27,7 @@ set communities [list]
 set count 0
 set id ""
 set mode ""
-
+permission::require_permission -object_id $rule_id -privilege "admin"
 if { [exists_and_not_null rule_def_id] } {
    set exp_trigger "&rule_def_id=$rule_def_id"
    set mode "edit"
