@@ -15,8 +15,9 @@ function go() {
 	<center>You don't have permission to admin Rule. </center>
 	<br>
     </if>
+</if>
 <else>
 <property name="title">Registration Rules</property>
 <formtemplate id="add_trigger"></formtemplate>
 </else>
-</if>
+

@@ -8,7 +8,7 @@ ad_page_contract {
     rule_id:notnull
     selected_qs:optional
 }
-
+ad_maybe_redirect_for_registration
 set qs_sel 0
 set context [list [list "one-rule?rule_id=$rule_id" "Rule Properties"] "Add Trigger"]
 set package_id [ad_conn package_id]

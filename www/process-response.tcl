@@ -15,11 +15,11 @@ set rest ""
 set message ""
 set notif_text ""
 
-db_foreach rules_related { select * from rules where asm_id=:survey_id } {
+db_foreach rules_related { *SQL*  } {
     if { $active_p == "y"} {
-	db_foreach rule_triggers {select result_id,rule_def_id, qs_id, active_p, rule_id from rules_triggers  where rule_id=:rule_id } {
+	db_foreach rule_triggers { *SQL* } {
             if { $active_p == "y" } {
-		set answer [db_string answer { select choice_id from survey_question_responses where question_id=:qs_id and response_id=:response_id}] 
+		set answer [db_string answer { *SQL* }] 
 		
 		if { $answer == $result_id } {
 		    set perform_actions 1
@@ -27,11 +27,11 @@ db_foreach rules_related { select * from rules where asm_id=:survey_id } {
 		    set perform_actions 0
 		}
 		if { $perform_actions == 1 } {
-		    db_foreach action { select * from rules_actions where rule_id=:rule_id} {
+		    db_foreach action { *SQL* } {
 			set rha_id [db_nextval rha_seq]
-			set community_name [db_string name {select pretty_name from dotlrn_communities_all where community_id=:group_id} -default System]
-			set today [db_string date "select to_date(sysdate,'YYYY-MM-DD') from dual"]
-			set  username [db_string name {select p.first_names || ' ' || p.last_name as name  from persons p where p.person_id = :user_id}]
+			set community_name [db_string name { *SQL* } -default System]
+			set today [db_string date { *SQL* }]
+			set  username [db_string username { *SQL* }]
 			if { $action_type == 1} {
 			    append message "<li> You have joined the $community_name community."
 			    append notif_text "The user user has joined the $community_name community." 
@@ -39,15 +39,15 @@ db_foreach rules_related { select * from rules where asm_id=:survey_id } {
 			    dotlrn_community::add_user $group_id $user_id
 			    }
 			    db_transaction {
-				db_dml add_history { insert into rule_history_actions (rha_id,group_id,user_id,rule_action_id,request_date,processing_date,approved_p) values (:rha_id,:group_id,:user_id,:rule_action_id,to_date(:today,'YYYY-MM-DD'),to_date(:today,'YYYY-MM-DD'),'y')}
+				db_dml add_history { *SQL* }
 			    }
 			} elseif { $action_type == 2 } {
 			    append message "<li> Your request to join  $community_name  has been sent to the administrator of the group."
 			    append notif_text "The user $username requested to join  $community_name."
 			    
-			    set today [db_string date "select sysdate from dual"]
+			    set today [db_string date { *SQL* }]
 			    db_transaction {
-				db_dml add_history { insert into rule_history_actions (rha_id,group_id,user_id,rule_action_id,request_date,processing_date,approved_p) values (:rha_id,:group_id,:user_id,:rule_action_id,to_date(:today,'YYYY-MM-DD'),'','n')}
+				db_dml add_history_wait { *SQL* }
 			    }
 			} elseif { $action_type == 3 } {
 			    set s_id ""
@@ -56,7 +56,7 @@ db_foreach rules_related { select * from rules where asm_id=:survey_id } {
 				    set s_id $question_id
 				}
 			    } 
-			    set user_info [db_string student_id {select number_answer from survey_question_responses where question_id = :s_id and response_id = :response_id}]
+			    set user_info [db_string student_id { *SQL* }]
 			    array set user_new_info [auth::create_user -username $user_info -email $user_info@viaro.net  -first_names $user_info -last_name $user_info -password $user_info]
 			    append message "<li> You have joined the System
 	                    <br>
@@ -74,7 +74,7 @@ db_foreach rules_related { select * from rules where asm_id=:survey_id } {
                             dotlrn_privacy::set_user_guest_p -user_id $user_id -value "t"
 			    dotlrn::user_add -can_browse  -user_id $user_id 
 			    db_transaction {          
-				db_dml add_history { insert into rule_history_actions (rha_id,group_id,user_id,rule_action_id,request_date,processing_date,approved_p) values (:rha_id,-1,:user_id,:rule_action_id,to_date(:today,'YYYY-MM-DD'),to_date(:today,'YYYY-MM-DD'),'y')}
+				db_dml add_history_system { *SQL* }
 			    }
 			}
 		    }

@@ -7,9 +7,8 @@
 	<center>You don't have permission to admin Rule. </center>
 	<br>
     </if>
-
+</if>
     <else>
 	<property name= "title">Edit Rule</property>
 	<formtemplate id="add_rule"></formtemplate>
     </else>
-</if>

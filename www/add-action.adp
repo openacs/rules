@@ -15,7 +15,8 @@ function getAction() {
 	<br>
     </if>
 <else>
+</if>
 <property name="title">Registration Rules</property>
 <formtemplate id="add_action"></formtemplate>
 </else>
-</if>
+

@@ -13,7 +13,7 @@ type_id
     for { set i 0} { $i < $request_count } { incr i } {
 	db_transaction {
             set r_id [lindex $request_id $i]
-	    db_dml remove_notify { delete from notification_requests where request_id=:r_id }
+	    db_dml remove_notify { *SQL* }
 	}
      }
 

@@ -30,6 +30,6 @@ if  { $rule_admin == 0 && $admin == 0 } {
 
 db_transaction {
 
-    db_dml update_action_result { update rules_actions set group_id=:res where rule_action_id=:action_id}
+    db_dml update_action_result { *SQL* }
 }
 ad_returnredirect "one-rule?rule_id=$rule_id&res=$res"

@@ -13,6 +13,6 @@ ad_page_contract {
 
 db_transaction {
 
-    db_dml update_trigger_result { update rules_triggers set result_id=:res where rule_id=:rule_id and rule_def_id=:trigger_id}
+    db_dml update_trigger_result { *SQL* }
 }
 ad_returnredirect "one-rule?rule_id=$rule_id&res=$res"
