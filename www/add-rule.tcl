@@ -5,7 +5,7 @@ ad_page_contract {
 
     Add new rule related to an Assessment
 } {
- 
+   rule_id:optional
 } -properties {
   context
 }
@@ -16,7 +16,7 @@ set context [list "Add rule"]
 
 set assessments [rules::rule::get_assessments]
 ad_form -name  add_rule  -form {
-     
+     rule_id:key     
     { rule_name:text(text) 
 	{label "Rule Name"}
     }
@@ -28,14 +28,14 @@ ad_form -name  add_rule  -form {
 	{label "Active"}
 	{options {{Yes y} { No n}}}
     }
-} -on_submit  {
-     set table_name "rules"
-     set id_column_name "rule_id"
-     set return_url "index"
-     set generated_id "rule_id"
-
-     rules::rule::new_rule  -rule_name $rule_name -asm_id $asm_id -active_p $active_p
+} -new_data  {
+   
+     rules::rule::new_rule -rule_id $rule_id -rule_name $rule_name -asm_id $asm_id -active_p $active_p
     
-} -after_submit {
+ } -edit_request {
+     db_1row get_rule_properties {select * from rules where rule_id=:rule_id} 
+ } -edit_data {
+     db_dml update_rule { update rules set rule_name=:rule_name, active_p=:active_p, asm_id=:asm_id where rule_id=:rule_id }
+ } -after_submit {
   ad_returnredirect "index"
 }
