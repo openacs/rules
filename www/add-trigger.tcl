@@ -11,6 +11,16 @@ ad_page_contract {
 
 set qs_sel 0
 set context [list [list "one-rule?rule_id=$rule_id" "Rule Properties"] "Add Trigger"]
+set package_id [ad_conn package_id]
+set user_id [ad_conn user_id]
+set context [list "Add rule"]
+set rule_admin ""
+set admin [permission::permission_p -object_id $package_id -party_id $user_id -privilege "admin"]
+if { [exists_and_not_null rule_id] } {
+set rule_admin [permission::permission_p -object_id $rule_id -party_id $user_id -privilege "admin"]
+}
+
+
 # Just while  get the assessment package ready
 
 set questions [list]
@@ -41,6 +51,7 @@ db_foreach results { *SQL* } {
      lappend results $result
 
 }
+
 
 form create add_trigger
 

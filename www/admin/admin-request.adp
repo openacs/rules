@@ -1,5 +1,5 @@
 <master src="admin-master">
-<property name="title">Registration Rules Administration</property>
+<property name="title">General Registration Rules Administration</property>
 <script language="JavaScript">
 
 function get_interval() {

@@ -18,7 +18,9 @@ ad_page_contract {
         if { $group_id != -1 } {
         set user_id  [db_string user { select user_id from rule_history_actions where rha_id=:r_id}] 
         set today [db_string today { select to_date (sysdate,'YYYY-MM-DD') from dual}]
+        if {![dotlrn::user_is_community_member_p  -user_id $user_id   -community_id $group_id]} {
         dotlrn_community::add_user $group_id $user_id
+	}
           
 		db_transaction {
                  

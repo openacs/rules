@@ -34,8 +34,10 @@ db_foreach rules_related { select * from rules where asm_id=:survey_id } {
 			set  username [db_string name {select p.first_names || ' ' || p.last_name as name  from persons p where p.person_id = :user_id}]
 			if { $action_type == 1} {
 			    append message "<li> You have joined the $community_name community."
-			    append notif_text "The user $user_name has joined the $community_name community." 
+			    append notif_text "The user user has joined the $community_name community." 
+			    if {![dotlrn::user_is_community_member_p  -user_id $user_id   -community_id $group_id]} {
 			    dotlrn_community::add_user $group_id $user_id
+			    }
 			    db_transaction {
 				db_dml add_history { insert into rule_history_actions (rha_id,group_id,user_id,rule_action_id,request_date,processing_date,approved_p) values (:rha_id,:group_id,:user_id,:rule_action_id,to_date(:today,'YYYY-MM-DD'),to_date(:today,'YYYY-MM-DD'),'y')}
 			    }
@@ -64,7 +66,12 @@ db_foreach rules_related { select * from rules where asm_id=:survey_id } {
                             <b>Password:</b>  $user_info"
 			    append notif_text "A user has joined to the system                                             
                                           User Name:  $user_info@viaro.net" 
+                            if { ![exists_and_not_null user_new_info(user_id)]} {
+                                   ad_return_complaint 1 "The user $user_info@viaro.net alredy exists in the system"
+                                   ad_script_abort
+			    } 
 			    set user_id $user_new_info(user_id)
+                            dotlrn_privacy::set_user_guest_p -user_id $user_id -value "t"
 			    dotlrn::user_add -can_browse  -user_id $user_id 
 			    db_transaction {          
 				db_dml add_history { insert into rule_history_actions (rha_id,group_id,user_id,rule_action_id,request_date,processing_date,approved_p) values (:rha_id,-1,:user_id,:rule_action_id,to_date(:today,'YYYY-MM-DD'),to_date(:today,'YYYY-MM-DD'),'y')}

@@ -8,6 +8,12 @@ ad_page_contract {
 }
 
 
+set package_id [ad_conn package_id]
+set user_id [ad_conn user_id]
+set context [list "Add rule"]
+set rule_admin ""
+set admin [permission::permission_p -object_id $package_id -party_id $user_id -privilege "admin"]
+
 template::list::create -name rules\
 -multirow all_rules\
 -key rule_id\
@@ -37,6 +43,7 @@ template::list::create -name rules\
 	label "Active"
 	display_template {
 	    <if @all_rules.active_p@ eq y>
+
 	     Yes / <a href=change-active?rule_id=@all_rules.rule_id@&res=@all_rules.active_p@>No</a>
 	    </if>
 	    <else >

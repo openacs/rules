@@ -13,7 +13,15 @@ ad_page_contract {
 
 # Just while I get the assessment package ready
 
+set package_id [ad_conn package_id]
+set user_id [ad_conn user_id]
 set context [list "Add rule"]
+set rule_admin ""
+set admin [permission::permission_p -object_id $package_id -party_id $user_id -privilege "admin"]
+if { [exists_and_not_null rule_id] } {
+set rule_admin [permission::permission_p -object_id $rule_id -party_id $user_id -privilege "admin"]
+}
+
 
 set assessments [rules::rule::get_assessments]
 ad_form -name  add_rule  -export { return_url } -form {
@@ -30,12 +38,19 @@ ad_form -name  add_rule  -export { return_url } -form {
 	{options {{Yes y} { No n}}}
     }
 } -new_data  {
-   
-     rules::rule::new_rule -rule_id $rule_id -rule_name $rule_name -asm_id $asm_id -active_p $active_p
+    set user_id [ad_conn user_id]   
+    set rule_id [rules::rule::new_rule -rule_id $rule_id -rule_name $rule_name -asm_id $asm_id -active_p $active_p]
+    permission::grant -object_id $rule_id -privilege "admin" -party_id $user_id
     
  } -edit_request {
      db_1row get_rule_properties {select * from rules where rule_id=:rule_id} 
  } -edit_data {
+if  { $rule_admin == 0 && $admin == 0 } {
+    ad_script_abort
+
+
+}
+
      db_dml update_rule { update rules set rule_name=:rule_name, active_p=:active_p, asm_id=:asm_id where rule_id=:rule_id }
  } -after_submit {
      

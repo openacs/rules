@@ -7,32 +7,4 @@
        from survey_sections ss where ss.survey_id=:survey_id)
    </querytext>
    </fullquery>
-   <fullquery name="responses">
-   <querytext>
-       select * from survey_responses where survey_id=:survey_id
-   </querytext>
-   </fullquery>
-   <fullquery name="question_responses">
-   <querytext>
-       select * from survey_questions_responses where response_id=:response_id
-   and question_id=:question_id
-   </querytext>
-   </fullquery>
-   <fullquery name="rules_related">
-      <querytext>
-      select * from rules where asm_id=:survey_id
-      </querytext>
-   </fullquery>
-   <fullquery name="rule_triggers">
-      <querytext>
-      select * from rules_triggers  where rule_id=:rule_id
-      </querytext>
-   </fullquery>
-   <fullquery name="answer">
-   <querytext>
-      select choice_id from survey_questions_responses where
-   question_id=:qs_id and response_id= (select response_id from survey_responses where survey_id=:survey_id)
-   </querytext>
-   </fullquery>
-   
 </queryset>
