@@ -13,6 +13,7 @@ template::list::create -name rules\
 -key rule_id\
 -bulk_actions {
     "Delete" "delete-rule" "Delete checked rules"
+    "Edit" "add-rule" "Edit checked rules"
 }\
 -bulk_action_method post -bulk_action_export_vars {
     rule_id
@@ -26,7 +27,7 @@ template::list::create -name rules\
 	
     }
     asm_name {
-	label "Assessment Related"
+	label "Related Questionnarie"
 	link_url_eval {../survey/admin/one?survey_id=$asm_id}
     }
     active_p {
@@ -41,9 +42,9 @@ template::list::create -name rules\
 	}
     }
         rule_id {
-	label "Notify"
+	label "Notifications"
 	display_template {
-	    <a href=request-notification?object_id=@all_rules.rule_id@&type_id=[notification::type::get_type_id -short_name rule_notif]&return_url=index>Notify</a>
+	    <a href=request-notification?object_id=@all_rules.rule_id@&type_id=[notification::type::get_type_id -short_name rule_notif]&return_url=index>Notify user</a>
 	  
 	}
     }

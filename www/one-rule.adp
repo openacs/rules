@@ -37,12 +37,13 @@ if (destination) location.href = destination;
  <tr>
   <td>
      <a href="add-trigger?rule_id=@rule_id@" title="Add Trigger" class="button">Add a
-     Trigger to the Rule</a>
+     Question to Rule</a>
   </td>
  <td>
  </td>
  <td>
-  <a href="request-notification?object_id=@rule_id@&type_id=@type_id@&return_url=one-rule?rule_id=@rule_id@" title="Notify" class="button">Add Notification</a>
+  <a
+  href="request-notification?object_id=@rule_id@&type_id=@type_id@&return_url=one-rule?rule_id=@rule_id@" title="Notify" class="button">Add Notification for this Rule</a>
  </td>
  </tr>
  <tr>
@@ -59,8 +60,8 @@ if (destination) location.href = destination;
 <table>
  <tr>
   <td>
-     <a href="add-action?rule_id=@rule_id@" title="Add action" class="button">Add an
-     action to the Rule</a>
+     <a href="add-action?rule_id=@rule_id@" title="Add action"
+     class="button">Add an action to Rule</a>
   </td>
  </tr>
  <tr>

@@ -50,7 +50,7 @@ template::list::create -name triggers\
 	}
     }
     result_id {
-	label "Result"
+	label "Answer"
         display_template {
 
 

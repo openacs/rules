@@ -1,4 +1,5 @@
 <master>
+<property name="title">Registration Rules</property>
 <script languate="JavaScript">
 function getAction() {
      action=document.add_action.action_type.value;

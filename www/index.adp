@@ -1,10 +1,10 @@
 <master>
 <property name="title">Registration Rules</property>
-<p style="text-align: right;"><a href="admin/admin-request">Waitting List</a></p>
 <table>
  <tr>
   <td>
-     <a href="add-rule" title="Add new rule" class="button">Add New Rule</a>
+     <a href="add-rule" title="Add new rule" class="button">Add New Rule</a> <a
+     href="admin/admin-request" title="Waiting Lists" class="button">Waiting Lists</a>
   </td>
  </tr>
  <tr>

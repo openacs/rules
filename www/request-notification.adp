@@ -1,4 +1,5 @@
 <master>
+<property name="title">Registration Rules</property>
 <property name="context">@context@</property>
 <table>
 <tr>
