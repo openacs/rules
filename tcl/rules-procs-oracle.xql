@@ -30,9 +30,9 @@
     
     <fullquery name="rules::rule::get_asm_name.get_asm_name">
     <querytext>
-		select a.asm_name 
-		from rules r, assessments a 
-		where a.asm_id=r.asm_id and r.rule_id=:rule_id
+		select a.name
+		from rules r, surveys a 
+		where a.survey_id=r.asm_id and r.rule_id=:rule_id
     </querytext>
     </fullquery>
 
