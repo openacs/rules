@@ -1,5 +1,6 @@
 <master>
-<p style="text-align: right;"><a href="admin/admin-request">Administer Rule</a></p>
+<property name="title">Registration Rules</property>
+<p style="text-align: right;"><a href="admin/admin-request">Waitting List</a></p>
 <table>
  <tr>
   <td>
