@@ -4,11 +4,16 @@ ad_page_contract {
     @creation_date 2004-12-03
 
 } {
+    interval:optional
+    specific_date:optional
+    state:optional
+    community:optional
 }
 
 set communities_list [list]
 
-lappend communities_list [list "All" ""]
+lappend communities_list [list "All" "all"]
+lappend communities_list [list "System" "-1"]
 
 db_foreach  community {select community_id,pretty_name from dotlrn_communities_all} {
     lappend communities_list [list $pretty_name $community_id]
@@ -16,35 +21,132 @@ db_foreach  community {select community_id,pretty_name from dotlrn_communities_a
 
 set approved_options [list [list "Not Approved" n] [list "Approved" y]]
 
-set today [db_string today {select sysdate from dual}]
-set yesterday [db_string yesterday {select (sysdate-1) from dual}]
-set last_week  [db_string last_week  {select (sysdate-7) from dual}]
-set two_days  [db_string two_weeks {select (sysdate-2) from dual}]
-set last_month [db_string last_month {select (sysdate-30) from dual}]
+set today [db_string today {select to_date(sysdate,'YYYY-MM-DD') from dual}]
+set yesterday [db_string yesterday {select to_date(sysdate-1,'YYYY-MM-DD') from dual}]
+set last_week  [db_string last_week  {select to_date(sysdate-7,'YYYY-MM-DD') from dual}]
+set two_days  [db_string two_weeks {select to_date(sysdate-2,'YYYY-MM-DD') from dual}]
+set last_month [db_string last_month {select to_date(sysdate-30,'YYYY-MM-DD') from dual}]
 
-set date_options [list [list "All" ""] [list "Today" $today] [list "Yesterday" $yesterday] [list "Two days ago" $two_days] [list "Last Week" $last_week] [list "Last Month" $last_month]]
+set default_interval "all"
+set default_specific_date  ""
+set default_community "all"
+set default_state "n"
+
+set date_options [list [list "All" "all"] [list "Today" $today] [list "Yesterday" $yesterday] [list "Two days ago" $two_days] [list "Last Week" $last_week] [list "Last Month" $last_month]]
+  
+set community_query ""
+
+if {[exists_and_not_null community] && $community != "all" } {
+   set default_community $community
+   set community_query " and r.group_id= $default_community"
+
+}
+if {[exists_and_not_null state]} {
+    set default_state $state;
+} 
+set interval_query ""
+set specific_date_query ""
+
+if {[exists_and_not_null interval] && $interval != "all" } {
+    set default_interval $interval
+    if { $interval == $today  ||  $interval == $yesterday || $interval== $two_days} {
+        set interval_query " and to_char(request_date,'YYYY-MM-DD') = '$interval'"
+    } else {
+        set interval_query " and to_char(request_date,'YYYY-MM-DD') > '$interval' and to_char(request_date,'YYYY-MM-DD') <= '$today'"
+    } 
+} 
+if {[exists_and_not_null specific_date]} {
+   set default_specific_date $specific_date
+   set specific_date_query "and to_char(request_date,'YYYY-MM-DD') = '$default_specific_date'"
+} 
+
+ set query "select r.rha_id,r.user_id,(select p.first_names || ' ' || p.last_name as name from persons p where p.person_id = r.user_id) as user_name, (select pretty_name from dotlrn_communities_all where community_id=r.group_id) as group_name, r.group_id,r.rule_action_id,to_date(r.request_date,'YYYY-MM-DD') as request_date ,r.approved_p from rule_history_actions r where approved_p='$default_state' $community_query $interval_query $specific_date_query"
+
+
+
 form create communities -has_submit
 element create communities community_id\
       -datatype text\
       -widget select\
       -label "Group Name"\
-      -options $communities_list
+      -options $communities_list\
+      -html { onChange "get_community()"}\
+      -value $default_community
+
 element create communities approved_p\
       -datatype text\
       -widget select\
       -label ""\
-      -options $approved_options
+      -options $approved_options\
+      -html { onChange "get_state()"}\
+      -value $default_state
 
-form create date -has_submit 1
-element create date date\
+form create interval -has_submit 1
+element create interval date\
       -datatype text\
       -widget select\
       -label "Date of Request"\
-      -options $date_options
+      -options $date_options\
+      -html { onChange "get_interval()"}\
+      -value $default_interval
 
-element create date submit\
+form create specific_date -has_submit 1
+element create specific_date specific_date \
+    -label "" \
+    -datatype text \
+    -widget text \
+    -optional\
+    -value $default_specific_date\
+    -html {id sel2}\
+    -after_html {<input type='reset' value=' ... ' onclick="return showCalendar('sel2', 'y-m-d');">[<b>YYYY-MM-DD</b>]}
+
+element create specific_date date submit\
       -widget submit\
-      -label "Specific Date"
+      -label "Specific Date"\
+      -html { onClick "get_specific_date()"}
 
+template::list::create -name requests\
+-multirow requests\
+-key rha_id\
+-bulk_actions {
+  "Bulk Mail" "bulk-mail" "Send mail to all users"
+  "Approve" "approve-users" "Approve users requests"
+}\
+-bulk_action_method post -bulk_action_export_vars {
+  
+}\
+-no_data "There are no requests"\
+-row_pretty_plural "requests"\
+-elements {
+    user_id {
+	label "User"
+        display_col user_name
+    }
+    group_id {
+         label "Group Name"
+	display_template {
+             < if @requests.group_id@ eq -1>
+               System
+             </if> <else> 
+               @requests.group_name@
+             </else>
+	}
+    }
+    request_date {
+         label "Request Date"
+        
+    }
+    approved_p {
+         label "Approved"
+	display_template {
+         <if @requests.approved_p@ eq y>
+                  Yes
+         </if> 
+         <else>
+                No
+         </else>
+	} 
+    }
+}
 
-
+db_multirow requests requests $query
