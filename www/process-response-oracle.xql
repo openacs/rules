@@ -6,6 +6,7 @@
 			select * from survey_questions where section_id in (select section_id
 			from survey_sections ss where ss.survey_id=:survey_id)
 	      </querytext>
+
    </fullquery>
 
    <fullquery name="rules_related">

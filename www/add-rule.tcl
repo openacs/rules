@@ -45,11 +45,6 @@ ad_form -name  add_rule  -export { return_url } -form {
  } -edit_request {
      db_1row get_rule_properties {select * from rules where rule_id=:rule_id} 
  } -edit_data {
-if  { $rule_admin == 0 && $admin == 0 } {
-    ad_script_abort
-
-
-}
 
      db_dml update_rule { update rules set rule_name=:rule_name, active_p=:active_p, asm_id=:asm_id where rule_id=:rule_id }
  } -after_submit {

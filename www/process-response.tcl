@@ -15,6 +15,7 @@ set rest ""
 set message ""
 set notif_text ""
 
+
 db_foreach rules_related { *SQL*  } {
     if { $active_p == "y"} {
 	db_foreach rule_triggers { *SQL* } {
@@ -25,6 +26,7 @@ db_foreach rules_related { *SQL*  } {
 		    set perform_actions 1
 		} else {
 		    set perform_actions 0
+
 		}
 		if { $perform_actions == 1 } {
 		    db_foreach action { *SQL* } {
@@ -54,6 +56,7 @@ db_foreach rules_related { *SQL*  } {
 			    db_foreach questions { *SQL* } {
 				if { $question_text == "student_id"} {
 				    set s_id $question_id
+
 				}
 			    } 
 			    set user_info [db_string student_id { *SQL* }]
@@ -78,6 +81,7 @@ db_foreach rules_related { *SQL*  } {
 			    }
 			}
 		    }
+
 		}
 		append notif_text "You can visit this rule history at http://216.230.130.230:3500/rules/admin/admin-request"
 		notification::new -type_id [notification::type::get_type_id -short_name rule_notif] -object_id $rule_id -notif_subject "$rule_name has been executed" -notif_text $notif_text
@@ -85,6 +89,7 @@ db_foreach rules_related { *SQL*  } {
 	}
     }
 }
+
 
 
 

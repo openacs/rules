@@ -55,6 +55,7 @@ if {[exists_and_not_null rule] && $rule != "all" } {
 
 }
 
+
 if {[exists_and_not_null state]} {
     set default_state $state;
 } 

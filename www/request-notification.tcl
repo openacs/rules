@@ -113,5 +113,12 @@ template::list::create -name notify_users\
     name {
           label "UserName"
  }
+    interval_name {
+          label "Interval"
+	
+    }
+    delivery_name {
+          label "Delivery Method"
+    }
 }
     db_multirow notify_users notify_users { *SQL* }

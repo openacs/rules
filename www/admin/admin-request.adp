@@ -14,6 +14,7 @@ function get_specific_date() {
         date=document.specific_date.specific_date.value; 
         destination ="admin-request?community=@default_community@&state=@default_state@&rule=@default_rule@&interval=@default_interval@&specific_date="+date;
              if (destination) location.href = destination;
+
       
 }
 </script>
@@ -25,6 +26,16 @@ function get_community() {
       
 }
 </script>
+<script language="JavaScript">
+function get_rule() {
+        rule=document.rules.rule_id.value;
+        destination = "admin-request?state=@default_state@&interval=@default_interval@&specific_date=@default_specific_date@&community=@default_community@&rule="+rule;
+
+        if (destination) location.href = destination;
+      
+}
+</script>
+
 <script language="JavaScript">
 function get_rule() {
         rule=document.rules.rule_id.value;
