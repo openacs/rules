@@ -28,7 +28,7 @@ template::list::create -name triggers\
 -elements {
     rule_def_id {
 	display_template {
-        <a href=delete-trigger?rule_def_id=@rule_triggers.rule_def_id@&rule_id=$rule_id>Remove</a>
+        <a href=delete-trigger?rule_def_id=@rule_triggers.rule_def_id@&rule_id=$rule_id><img border=0 src=images/Delete16.gif></a>
 	}
     }
     qs_id {
@@ -90,7 +90,7 @@ template::list::create -name actions\
 -elements {
     rule_action_id {
 	display_template {
-        <a href=delete-action?rule_action_id=@rule_actions.rule_action_id@&rule_id=$rule_id>Remove</a>
+        <a href=delete-action?rule_action_id=@rule_actions.rule_action_id@&rule_id=$rule_id><img border=0 src=images/Delete16.gif></a>
 	}
     }
 
