@@ -13,8 +13,7 @@ function get_interval() {
 function get_specific_date() {
         date=document.specific_date.specific_date.value; 
         destination ="admin-request?community=@default_community@&state=@default_state@&rule=@default_rule@&interval=@default_interval@&specific_date="+date;
-         alert (destination);
-        if (destination) location.href = destination;
+             if (destination) location.href = destination;
       
 }
 </script>

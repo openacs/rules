@@ -49,8 +49,9 @@ if {[exists_and_not_null community] && $community != "all" } {
 
 }
 if {[exists_and_not_null rule] && $rule != "all" } {
+
    set default_rule $rule
-   set rule_query " and r.rule_action_id= (select rule_action_id from rules_actions where rule_id = $default_rule)"
+   set rule_query " and r.rule_action_id in (select rule_action_id from rules_actions where rule_id = $default_rule)"
 
 }
 

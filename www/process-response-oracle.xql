@@ -19,10 +19,14 @@
    </querytext>
    </fullquery>
    <fullquery name="rules_related">
+      <querytext>
       select * from rules where asm_id=:survey_id
+      </querytext>
    </fullquery>
    <fullquery name="rule_triggers">
+      <querytext>
       select * from rules_triggers  where rule_id=:rule_id
+      </querytext>
    </fullquery>
    <fullquery name="answer">
    <querytext>
