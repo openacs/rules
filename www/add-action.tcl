@@ -6,18 +6,26 @@ ad_page_contract {
     Add new rule related to an Assessment
 } {
     rule_id:notnull
+    selected_a:optional
 }
+
+set default_action 1
 
 # Just while I get the assessment package ready
 set context [list [list "one-rule?rule_id=$rule_id" "Rule Properties"] "Add Action"]
-
-
-set actions { {"add user to" 1} {"add to list of" 2} }
-set results [list]
-db_foreach communities { *SQL* } {
-    lappend results [list $pretty_name $community_id]
+if { [exists_and_not_null selected_a]} {
+      set default_action $selected_a
 }
 
+set actions { {"add user to" 1} {"add to list of" 2} {"add user to the system" 3}}
+set results [list]
+if { $default_action != 3 } {
+db_foreach communities { *SQL* } {
+    lappend results [list $pretty_name $community_id]
+} 
+} else {
+    lappend  results [list "System" -1]
+}
 
 
 form create add_action
@@ -31,7 +39,9 @@ element create add_action action_type\
      -datatype text\
      -widget select\
      -label "Action"\
-     -options $actions
+     -options $actions\
+     -html { onChange getAction()}\
+     -value $default_action
     
 element create add_action group_id\
       -datatype text\
