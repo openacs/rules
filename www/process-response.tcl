@@ -34,14 +34,14 @@ db_foreach rules_related { select * from rules where asm_id=:survey_id } {
 			set  username [db_string name {select p.first_names || ' ' || p.last_name as name  from persons p where p.person_id = :user_id}]
 			if { $action_type == 1} {
 			    append message "<li> You have joined the $community_name community."
-			    append notif_text "The user user has joined the $community_name community." 
+			    append notif_text "The user $user_name has joined the $community_name community." 
 			    dotlrn_community::add_user $group_id $user_id
 			    db_transaction {
 				db_dml add_history { insert into rule_history_actions (rha_id,group_id,user_id,rule_action_id,request_date,processing_date,approved_p) values (:rha_id,:group_id,:user_id,:rule_action_id,to_date(:today,'YYYY-MM-DD'),to_date(:today,'YYYY-MM-DD'),'y')}
 			    }
 			} elseif { $action_type == 2 } {
 			    append message "<li> Your request to join  $community_name  has been sent to the administrator of the group."
-			    append notif_text "The user $username requested to join  $community_name  has been sent to the administrator of the group."
+			    append notif_text "The user $username requested to join  $community_name."
 			    
 			    set today [db_string date "select sysdate from dual"]
 			    db_transaction {
