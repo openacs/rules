@@ -13,15 +13,7 @@ set default_action 1
 
 # Just while I get the assessment package ready
 set context [list [list "one-rule?rule_id=$rule_id" "Rule Properties"] "Add Action"]
-set package_id [ad_conn package_id]
-set user_id [ad_conn user_id]
-set context [list "Add rule"]
-set rule_admin ""
-set admin [permission::permission_p -object_id $package_id -party_id $user_id -privilege "admin"]
-if { [exists_and_not_null rule_id] } {
-set rule_admin [permission::permission_p -object_id $rule_id -party_id $user_id -privilege "admin"]
-}
-
+permission::require_permission -object_id $rule_id -privilege "admin"
 if { [exists_and_not_null selected_a]} {
       set default_action $selected_a
 }
@@ -29,9 +21,11 @@ if { [exists_and_not_null selected_a]} {
 
 set actions { {"Add Automatically" 1} {"Add to waiting list" 2} }
 set results [list]
+if { [apm_package_installed_p dotlrn] == 1 } {
 db_foreach communities { *SQL* } {
     lappend results [list $pretty_name $community_id]
 } 
+}
     lappend  results [list "to website" -1]
 
 

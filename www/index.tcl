@@ -7,13 +7,6 @@ ad_page_contract {
 
 }
 
-
-set package_id [ad_conn package_id]
-set user_id [ad_conn user_id]
-set context [list "Add rule"]
-set rule_admin ""
-set admin [permission::permission_p -object_id $package_id -party_id $user_id -privilege "admin"]
-
 template::list::create -name rules\
 -multirow all_rules\
 -key rule_id\
@@ -54,7 +47,7 @@ template::list::create -name rules\
         rule_id {
 	label "Notifications"
 	display_template {
-	    <a href=request-notification?object_id=@all_rules.rule_id@&type_id=[notification::type::get_type_id -short_name rule_notif]>Notify user</a>
+	    <a href=request-notification?return_url=index&object_id=@all_rules.rule_id@&type_id=[notification::type::get_type_id -short_name rule_notif]>Notify user</a>
 	  
 	}
     }

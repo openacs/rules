@@ -50,8 +50,8 @@ State:<b>@state@</b>
  </td>
  <td>
   <a
-  href="request-notification?object_id=@rule_id@&type_id=@type_id@&return_url=one-rule?rule_id=@rule_id@" title="Notify" class="button">Add Notification for this Rule</a>
-  <a href="admin-request?rule=@rule_id@" title="Waiting List"
+  href="request-notification?object_id=@rule_id@&type_id=@type_id@&return_url=one-rule" title="Notify" class="button">Add Notification for this Rule</a>
+  <a href="admin-request?return_url=one-rule&rule=@rule_id@" title="Waiting List"
   class="button">Waiting List</a>
 
  </td>

@@ -10,23 +10,8 @@ ad_page_contract {
 
     
 }
-set package_id [ad_conn package_id]
-set user_id [ad_conn user_id]
+permission::require_permission -object_id $rule -privilege "admin"
 set context [list "Add rule"]
-set rule_admin ""
-set admin [permission::permission_p -object_id $package_id -party_id $user_id -privilege "admin"]
- if { [exists_and_not_null rule] } {
-set rule_admin [permission::permission_p -object_id $rule -party_id $user_id -privilege "admin"]
-}
-
-if  { $rule_admin == 0 && $admin == 0 } {
-    doc_return 200 text/html  "<h3>Permission Denied</h3>
-                               You don't have permission to admin this Rule. "
-    ad_script_abort
-
-
-}
-
 
     set rules_count [llength $rha_id]
     for { set i 0} { $i < $rules_count } { incr i } {

@@ -9,28 +9,15 @@ ad_page_contract {
     state:optional
     community:optional
     rule:notnull
+    return_url
+} -properties {
+    context
 }
+
+permission::require_permission -object_id $rule -privilege "admin"
 
 set rule_name [ db_string name {select rule_name from rules where rule_id=:rule } -default "" ]
-set context [list [list "one-rule?rule_id=$rule" "Rule Properties"] "$rule_name"]
-set package_id [ad_conn package_id]
-set user_id [ad_conn user_id]
-set context [list "Add rule"]
-set rule_admin ""
-set admin [permission::permission_p -object_id $package_id -party_id $user_id -privilege "admin"]
-if { [exists_and_not_null rule] } {
-set rule_admin [permission::permission_p -object_id $rule -party_id $user_id -privilege "admin"]
-}
-
-if  { $rule_admin == 0 && $admin == 0 } {
-    doc_return 200 text/html  "<h3>Permission Denied</h3>
-                               You don't have permission to admin this Rule. "
-    ad_script_abort
-
-
-}
-
-
+set context [list [list "$return_url?rule_id=$rule" "Rule Properties"] "$rule_name"]
 set communities_list [list]
 lappend communities_list [list "All" "all"]
 lappend communities_list [list "System" "-1"]
@@ -142,8 +129,11 @@ element create specific_date specific_date \
     -value $default_specific_date\
     -html {id sel2}\
     -after_html {<input type='reset' value=' ... ' onclick="return showCalendar('sel2', 'y-m-d');">[<b>YYYY-MM-DD</b>]}
-
-element create specific_date date submit\
+element create specific_date return_url\
+     -value $return_url\
+     -widget hidden\
+     -datatype text
+element create specific_date  submit\
       -widget submit\
       -label "Specific Date"\
       -html { onClick "get_specific_date()"}

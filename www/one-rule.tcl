@@ -10,23 +10,9 @@ ad_page_contract {
    qs:optional
    trigger:optional
 }
-set package_id [ad_conn package_id]
-set user_id [ad_conn user_id]
-set context [list "Add rule"]
-set rule_admin ""
-set admin [permission::permission_p -object_id $package_id -party_id $user_id -privilege "admin"]
-if { [exists_and_not_null rule_id] } {
-set rule_admin [permission::permission_p -object_id $rule_id -party_id $user_id -privilege "admin"]
-}
 
-if  { $rule_admin == 0 && $admin == 0 } {
-    doc_return 200 text/html  "<h3>Permission Denied</h3>
-                               You don't have permission to admin this Rule. "
-    ad_script_abort
-
-
-}
-
+permission::require_permission -object_id $rule_id -privilege "admin"
+set dotlrn_installed_p [apm_package_installed_p dotlrn]
 set context [list "Rule Properties"]
 set qs_id_2 0
 if { ![exists_and_not_null qs]} {
@@ -55,7 +41,7 @@ template::list::create -name triggers\
 -elements {
     rule_def_id {
 	display_template {
-        <a href=delete-trigger?rule_def_id=@rule_triggers.rule_def_id@&rule_id=$rule_id><img border=0 src=images/Delete16.gif></a>
+        <a href=delete-trigger?rule_def_id=@rule_triggers.rule_def_id@&rule_id=$rule_id&return_url=one-rule><img border=0 src=images/Delete16.gif></a>
 	}
     }
     qs_id {
@@ -139,7 +125,9 @@ template::list::create -name actions\
 	display_template {
             <select name=res@rule_actions.rule_action_id@ onChange=group@rule_actions.rule_action_id@()> 
             <%
+            if {$dotlrn_installed_p == 1} {
 	    db_multirow communities communities {select community_id,pretty_name from dotlrn_communities_all}
+	    }
             %>     <if @rule_actions.group_id@ eq -1>
                    <option value=@rule_actions.group_id@>to website
 	           <multiple name="communities">

@@ -7,6 +7,7 @@ ad_page_contract {
 object_id:notnull
 request_id:multiple
 type_id     
+return_url
 } 
 
     set request_count [llength $request_id]
@@ -17,4 +18,4 @@ type_id
 	}
      }
 
-    ad_returnredirect "request-notification?object_id=$object_id&type_id=$type_id&return_url=one-rule?rule_id=$object_id"
+    ad_returnredirect "request-notification?object_id=$object_id&type_id=$type_id&return_url=$return_url"

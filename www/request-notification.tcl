@@ -12,25 +12,15 @@ ad_page_contract {
     object_id:integer,notnull
     {pretty_name ""}
     users_list:optional
+    {return_url}
     
    
 }
 set package_id [ad_conn package_id]
 set user_id [ad_conn user_id]
 set context [list "Add rule"]
-set rule_admin ""
-set admin [permission::permission_p -object_id $package_id -party_id $user_id -privilege "admin"]
-if { [exists_and_not_null object_id] } {
-set rule_admin [permission::permission_p -object_id $object_id -party_id $user_id -privilege "admin"]
-}
 
-if  { $rule_admin == 0 && $admin == 0 } {
-    doc_return 200 text/html  "<h3>Permission Denied</h3>
-                               You don't have permission to admin Rule. "
-    ad_script_abort
-
-
-}
+permission::require_permission -object_id $object_id -privilege "admin"
 
 # Check that the object can be subcribed to
 notification::security::require_notify_object -object_id $object_id
@@ -41,7 +31,7 @@ if {[empty_string_p $pretty_name]} {
     set page_title "[_ notifications.lt_Request_Notification_]"
 }
 
-set context [list [list "one-rule?rule_id=$object_id" "Rule Properties"] "[_ notifications.Request_Notification]"]
+set context [list [list "$return_url?rule_id=$object_id" "Rule Properties"] "[_ notifications.Request_Notification]"]
 
 set intervals [notification::get_intervals -type_id $type_id]
 set delivery_methods [notification::get_delivery_methods -type_id $type_id]
@@ -93,7 +83,7 @@ if {[template::form is_valid request]} {
             -delivery_method_id $delivery_method_id
 
 
-    ad_returnredirect "request-notification?type_id=$type_id&object_id=$object_id"
+    ad_returnredirect "request-notification?type_id=$type_id&object_id=$object_id&return_url=$return_url"
 }
 
 template::list::create -name notify_users\
@@ -106,6 +96,7 @@ template::list::create -name notify_users\
     -bulk_action_method post -bulk_action_export_vars {
    object_id
    type_id
+   return_url
     }\
 -no_data "There are no users to notify"\
 -row_pretty_plural "notify_users"\

@@ -5,7 +5,7 @@
 
 function get_interval() {
         interval=document.interval.date.value; 
-        destination = "admin-request?community=@default_community@&state=@default_state@&rule=@default_rule@&interval="+interval;
+        destination = "admin-request?return_url=@return_url@&community=@default_community@&state=@default_state@&rule=@default_rule@&interval="+interval;
         if (destination) location.href = destination;
       
 }
@@ -13,7 +13,7 @@ function get_interval() {
 <script language="JavaScript">
 function get_specific_date() {
         date=document.specific_date.specific_date.value; 
-        destination ="admin-request?community=@default_community@&state=@default_state@&rule=@default_rule@&interval=@default_interval@&specific_date="+date;
+        destination ="admin-request?return_url=@return_url@&community=@default_community@&state=@default_state@&rule=@default_rule@&interval=@default_interval@&specific_date="+date;
              if (destination) location.href = destination;
       
 }
@@ -21,7 +21,7 @@ function get_specific_date() {
 <script language="JavaScript">
 function get_community() {
         community=document.communities.community_id.value;
-        destination = "admin-request?state=@default_state@&interval=@default_interval@&rule=@default_rule@&specific_date=@default_specific_date@&community="+community;
+        destination = "admin-request?return_url=@return_url@&state=@default_state@&interval=@default_interval@&rule=@default_rule@&specific_date=@default_specific_date@&community="+community;
         if (destination) location.href = destination;
       
 }
@@ -30,7 +30,7 @@ function get_community() {
 <script language="JavaScript">
 function get_state() {
         state=document.communities.approved_p.value; 
-        destination = "admin-request?community=@default_community@&interval=@default_interval@&specific_date=@default_specific_date@&rule=@default_rule@&state="+state;
+        destination = "admin-request?return_url=@return_url@&community=@default_community@&interval=@default_interval@&specific_date=@default_specific_date@&rule=@default_rule@&state="+state;
          if (destination) location.href = destination;
       
 }
