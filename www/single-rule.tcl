@@ -46,7 +46,7 @@ template::list::create -name triggers\
 -elements {
     rule_def_id {
 	display_template {
-<a href=single-rule-add?rule_def_id=@rule_triggers.rule_def_id@&rule_id=$rule_id&s_qs=@rule_triggers.qs_id@&s_answer=@rule_triggers.result_id@&s_action=@rule_triggers.action_type@&s_group=@rule_triggers.group_id@><img border=0 src=images/Edit16.gif></a>
+<a href=single-rule-add?rule_def_id=@rule_triggers.rule_def_id@&rule_id=$rule_id&s_qs=@rule_triggers.qs_id@&s_answer=@rule_triggers.result_id@&s_action=@rule_triggers.action_type@&s_group=@rule_triggers.group_id@&s_active=@rule_triggers.active_p@><img border=0 src=images/Edit16.gif></a>
         <a href=delete-single-rule?return_url=single-rule&rule_def_id=@rule_triggers.rule_def_id@&rule_id=$rule_id><img border=0 src=images/Delete16.gif></a>         
 	}
     }

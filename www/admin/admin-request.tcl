@@ -161,13 +161,15 @@ template::list::create -name requests\
 -elements {
     user_id {
 	label "User"
-        display_col user_name
+        display_template { 
+             <a href=../../shared/community-member?user_id=@requests.user_id@>@requests.user_name@</a>
+	}
     }
     group_id {
          label "Group Name"
 	display_template {
              < if @requests.group_id@ eq -1>
-               System
+               to websyte
              </if> <else> 
                @requests.group_name@
              </else>

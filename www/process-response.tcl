@@ -35,6 +35,7 @@ db_foreach rules_related { *SQL*  } {
 			set today [db_string date { *SQL* }]
 			set  username [db_string username { *SQL* }]
 			if { $action_type == 1} {
+                            if { $group_id > -1 } { 
 			    append message "<li> You have joined the $community_name community."
 			    append notif_text "The user user has joined the $community_name community." 
 			    if {![dotlrn::user_is_community_member_p  -user_id $user_id   -community_id $group_id]} {
@@ -43,15 +44,7 @@ db_foreach rules_related { *SQL*  } {
 			    db_transaction {
 				db_dml add_history { *SQL* }
 			    }
-			} elseif { $action_type == 2 } {
-			    append message "<li> Your request to join  $community_name  has been sent to the administrator of the group."
-			    append notif_text "The user $username requested to join  $community_name."
-			    
-			    set today [db_string date { *SQL* }]
-			    db_transaction {
-				db_dml add_history_wait { *SQL* }
-			    }
-			} elseif { $action_type == 3 } {
+			    } else {
 			    set s_id ""
 			    db_foreach questions { *SQL* } {
 				if { $question_text == "student_id"} {
@@ -80,6 +73,16 @@ db_foreach rules_related { *SQL*  } {
 				db_dml add_history_system { *SQL* }
 			    }
 			}
+
+			} elseif { $action_type == 2 } {
+			    append message "<li> Your request to join  $community_name  has been sent to the administrator of the group."
+			    append notif_text "The user $username requested to join  $community_name."
+			    
+			    set today [db_string date { *SQL* }]
+			    db_transaction {
+				db_dml add_history_wait { *SQL* }
+			    }
+			} 
 		    }
 
 		}
