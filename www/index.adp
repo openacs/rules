@@ -1,4 +1,5 @@
 <master>
+<p style="text-align: right;"><a href="admin/admin-request">Administer Rule</a></p>
 <table>
  <tr>
   <td>
