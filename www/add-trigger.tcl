@@ -12,12 +12,6 @@ ad_page_contract {
 set qs_sel 0
 set context [list [list "one-rule?rule_id=$rule_id" "Rule Properties"] "Add Trigger"]
 # Just while  get the assessment package ready
-if { ![exists_and_not_null selected_qs]} {
-       set selected_qs 01
-       set qs_sel $selected_qs
-} else {
-       set qs_sel $selected_qs
-}
 
 set questions [list]
 set results [list]
@@ -26,20 +20,23 @@ set first_qs 0
 
 db_foreach questions { *SQL* } {
     incr count
-    if  { $count == 1 } { 
-          set first_qs $qs_id
-    }
-    set question [list $description $qs_id]
-    lappend questions $question
+    if  { $count == 1 && ![exists_and_not_null selected_qs]} { 
+          set selected_qs  $qs_id
+      }
+     set question [list $description $qs_id]
+     lappend questions $question
+}
+if { ![exists_and_not_null selected_qs]} {
+       set qs_sel $selected_qs
+} else {
+       set qs_sel $selected_qs
 }
 
-db_foreach result {select choice_id as result_id, label as value from survey_question_choices  where  question_id = :first_qs} {
-    lappend results [list $value $result_id]
-}
 
 db_foreach results { *SQL* } {
-    set result [list $value $result_id]
-    lappend results $result
+     set result  [list $value $result_id]
+     lappend results $result
+
 }
 
 form create add_trigger
