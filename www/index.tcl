@@ -13,7 +13,6 @@ template::list::create -name rules\
 -key rule_id\
 -bulk_actions {
     "Delete" "delete-rule" "Delete checked rules"
-    "Edit" "add-rule" "Edit checked rules"
 }\
 -bulk_action_method post -bulk_action_export_vars {
     rule_id
@@ -23,7 +22,11 @@ template::list::create -name rules\
 -elements {
     rule_name {
 	label "Rule Name"
-        link_url_eval {[export_vars -base one-rule { rule_id}]}
+        display_template
+        {
+         <a href=add-rule?rule_id=@all_rules.rule_id@><img border=0 src=images/Edit16.gif></a> <a href=one-rule?rule_id=@all_rules.rule_id@>@all_rules.rule_name@</a>
+	}
+
 	
     }
     asm_name {
