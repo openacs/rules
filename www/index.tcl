@@ -24,13 +24,13 @@ template::list::create -name rules\
 	label "Rule Name"
         display_template
         {
-         <a href=add-rule?rule_id=@all_rules.rule_id@><img border=0 src=images/Edit16.gif></a> <a href=one-rule?rule_id=@all_rules.rule_id@>@all_rules.rule_name@</a>
+         <a href=add-rule?rule_id=@all_rules.rule_id@&return_url=index><img border=0 src=images/Edit16.gif></a> <a href=one-rule?rule_id=@all_rules.rule_id@>@all_rules.rule_name@</a>
 	}
 
 	
     }
     asm_name {
-	label "Related Questionnarie"
+	label "Related Questionnaire"
 	link_url_eval {../survey/admin/one?survey_id=$asm_id}
     }
     active_p {
@@ -47,7 +47,7 @@ template::list::create -name rules\
         rule_id {
 	label "Notifications"
 	display_template {
-	    <a href=request-notification?object_id=@all_rules.rule_id@&type_id=[notification::type::get_type_id -short_name rule_notif]&return_url=index>Notify user</a>
+	    <a href=request-notification?object_id=@all_rules.rule_id@&type_id=[notification::type::get_type_id -short_name rule_notif]>Notify user</a>
 	  
 	}
     }

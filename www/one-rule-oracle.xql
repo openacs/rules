@@ -23,10 +23,13 @@
    </fullquery>
    <fullquery name="questions">
    <querytext>
-            select question_id as qs_id, question_text as description
-            from survey_questions
-            where section_id = (select section_id from survey_sections where
-            survey_id=(select asm_id from rules where rule_id=:rule_id)) 
+            select sq.question_id as qs_id, sq.question_text as description
+            from survey_questions sq
+            where sq.section_id = (select section_id from survey_sections where
+	    survey_id=(select asm_id from rules where rule_id=:rule_id)) and sq.question_id not
+	    in (select qs_id from rules_triggers where rule_id=:rule_id)  and (select
+	    count(choice_id) from survey_question_choices  where  question_id =
+	    sq.question_id) > 0 
  
    </querytext>
    

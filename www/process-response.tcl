@@ -14,8 +14,12 @@ set perform_actions 0
 set rest ""
 set message ""
 set notif_text ""
+
 db_foreach rules_related {select * from rules where asm_id=:survey_id} {
     db_foreach rule_triggers { select * from rules_triggers  where rule_id=:rule_id } {
+           #ad_return_complaint 1 "$qs_id $response_id"
+           #ad_script_abort
+        
 	set answer [db_string answer { select choice_id from survey_question_responses where question_id=:qs_id and response_id=:response_id}] 
         if { $answer == $result_id } {
             set perform_actions 1
@@ -25,15 +29,19 @@ db_foreach rules_related {select * from rules where asm_id=:survey_id} {
     }
     if { $perform_actions == 1 } {
         db_foreach action { select * from rules_actions where rule_id=:rule_id} {
+ #          ad_return_complaint 1 "$action_type"
+#           ad_script_abort
             set rha_id [db_nextval rha_seq]
             set community_name [db_string name {select pretty_name from dotlrn_communities_all where community_id=:group_id} -default System]
             set today [db_string date "select to_date(sysdate,'YYYY-MM-DD') from dual"]
             set  username [db_string name {select p.first_names || ' ' || p.last_name as name  from persons p where p.person_id = :user_id}]
 
+
 	    if { $action_type == 1} {
 
                 append message "<li> You have joined the $community_name community."
                 append notif_text "The user user has joined the $community_name community." 
+
                     dotlrn_community::add_user $group_id $user_id
                   
 		db_transaction {
@@ -43,14 +51,24 @@ db_foreach rules_related {select * from rules where asm_id=:survey_id} {
 	    } elseif {$action_type == 2} {
                                 append message "<li> Your request to join  $community_name  has been sent to the administrator of the group."
                                append notif_text "The user $username requested to join  $community_name  has been sent to the administrator of the group."
+
                                 set today [db_string date "select sysdate from dual"]
                  		db_transaction {
 				    db_dml add_history { insert into rule_history_actions (rha_id,group_id,user_id,rule_action_id,request_date,processing_date,approved_p) values (:rha_id,:group_id,:user_id,:rule_action_id,to_date(:today,'YYYY-MM-DD'),'','n')}
 
               
 				}
-	    } elseif {$action_type == 3 } {
-                set user_info [db_string student_id {select number_answer from survey_question_responses where question_id = (:qs_id+1) and response_id = :response_id}]
+	    } elseif { $action_type == 3 } {
+                set s_id ""
+                db_foreach questions { *SQL* } {
+		    if { $question_text == "student_id"} {
+                      set s_id $question_id
+		    }
+		} 
+#           ad_return_complaint 1 "$s_id"
+#          ad_script_abort
+  
+                set user_info [db_string student_id {select number_answer from survey_question_responses where question_id = :s_id and response_id = :response_id}]
 
 		array set user_new_info [auth::create_user -username $user_info -email $user_info@viaro.net  -first_names $user_info -last_name $user_info -password $user_info]
                 
@@ -71,6 +89,7 @@ db_foreach rules_related {select * from rules where asm_id=:survey_id} {
 		}
 
 		  }
+
     }
 
 }

@@ -48,10 +48,11 @@ template::list::create -name triggers\
                    
                    <select name=edit_qs@rule_triggers.rule_def_id@  onChange=go@rule_triggers.rule_def_id@(@rule_triggers.rule_def_id@)>
                    <% set qs_id_2 @rule_triggers.qs_id@
-	    db_multirow questions question {select question_id as qs_id, question_text as description
-            from survey_questions where section_id = (select section_id from survey_sections where
-            survey_id=(select asm_id from rules where rule_id=$rule_id)) 
-} %>
+	    db_multirow questions question {select sq.question_id as qs_id, sq.question_text as description
+            from survey_questions sq where sq.section_id in (select section_id from survey_sections where
+	    survey_id=(select asm_id from rules where rule_id=$rule_id)) and sq.question_id not
+	    in (select qs_id from rules_triggers where rule_id=$rule_id)  and (select
+	    count(choice_id) from survey_question_choices  where  question_id = sq.question_id) > 0 } %>
                     <option value=@rule_triggers.qs_id@>@rule_triggers.description@
                      <multiple name="questions">
                     <option value=@questions.qs_id@>@questions.description@
@@ -63,7 +64,6 @@ template::list::create -name triggers\
     result_id {
 	label "Answer"
         display_template {
-
 
             <select name=edit_result@rule_triggers.rule_def_id@ onChange=result@rule_triggers.rule_def_id@(@rule_triggers.rule_def_id@)>
 	    <% set q_id @rule_triggers.qs_id@

@@ -7,5 +7,6 @@ function getAction() {
      if (destination) location.href = destination;
 }
 </script>
+
 <property name="context">@context@</property>
 <formtemplate id="add_action"></formtemplate>
